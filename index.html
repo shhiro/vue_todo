@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<meta http-equiv="content-type" charset="utf-8">
+<html>
+  <head>
+    <title>My first Vue app</title>
+    <script src="https://unpkg.com/vue"></script>
+  </head>
+  <body>
+    <div id="app">
+      <main>
+        <h2 class="title">Todo</h2>
+        <p>{{ message }}</p>
+
+        <div class="row">
+            <form @submit.prevent>
+              <input type="text" v-model="addItem">
+              <button @click="add(addItem)">追加</button>  
+            </form>
+        </div>
+        <!-- <div v-for > -->
+          <div v-for="(todo, index) in todos" :key="todo.id">
+              {{ todo.id }}
+            {{ todo.text }}
+            {{ todo.done ? '✓' : '' }}
+            <button @click="done(index)">done</button>
+            <button @click="remove(index)">remove</button>          
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      var app = new Vue({
+        el: "#app",
+        data: {
+          addItem:"",
+          message: "Add Todo",
+          todos: [
+            { id: 1, text: "Lean TS", done: false },
+            { id: 2, text: "Lean JS", done: false }
+          ],
+          nextId: 3
+        },
+        methods: {
+          add: function(addItem) {
+            console.log(addItem)
+            this.message = 'Added Todo'
+            const oldList= this.todos
+            var addArray = [{
+              id: this.nextId,
+              text: addItem,
+              done: false
+            }];
+            
+            const newArray = this.todos.concat(addArray)
+            const obj = { id: 1, name: 'satoshi' }
+            console.log([...this.todos, 1,2,3,], { ...obj, value: 1 })
+
+            this.addItem = ""
+            this.nextId +=1
+            this.todos = newArray
+          },
+          done: function(index) {
+            // console.log('done before', index)
+            console.log('done before', this.todos[index])
+            const currentValue = this.todos[index].done
+            this.message = 'Done!'
+            this.todos[index].done = !currentValue;
+          },
+          remove: function(index) {
+            // this.todos.splice(index,1)
+            // const newArray =  this.todos.slice(index, index + 1)
+            // const newArray2 = this.todos.filter((todo, _index) => _index !== index)
+            const newArray2 = this.todos.filter((todo, _index) => _index !== index)
+            this.todos = newArray2;
+          }
+        }
+      });
+    </script>
+  </body>
+  <style>
+    main {
+      padding: 2rem 50px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      /* align-items: center; */
+    }
+    .title {
+      background-color: yellow;
+    }
+    .row {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+    }
+    /* input:checked ~ #content {
+      display: none
+    } */
+  </style>
+</html>
